@@ -5,7 +5,8 @@ class AppTextStyles {
 
   static const TextStyle textoGrande = TextStyle(
     fontSize: 50.0, 
-    fontWeight: FontWeight.w700,
+    fontFamily: 'Montserrat'
+    // fontWeight: FontWeight.w700,
     // A propriedade de cor é adicionada com .copyWith(color: cor) na instância
   );
 }

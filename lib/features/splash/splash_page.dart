@@ -12,11 +12,13 @@ class SplashPage extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: AppColors.gradienteRosa,
+            colors: AppColors.gradienteLilas,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
         child: Text(
-          'Financy',
+          'Tasks Manager',
           style: AppTextStyles.textoGrande.copyWith(color: AppColors.branco),
         ),
       ),

@@ -6,5 +6,5 @@ class AppColors {
   static const Color rosaClaro = Color(0xFFFFA7D3);
   static const Color rosaEscuro = Color(0xFFFF82C0);
   static const Color branco = Color(0xFFFFFFFF);
-  static List<Color> gradienteRosa = [Color(0xFFFFA7D3), Color(0xFFFF82C0)];
+  static List<Color> gradienteLilas = [Color(0xFFB08EFF), Color.fromARGB(255, 117, 64, 243)];
 }
