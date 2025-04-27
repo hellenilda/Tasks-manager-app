@@ -19,7 +19,8 @@ class SplashPage extends StatelessWidget {
         ),
         child: Text(
           'Tasks Manager',
-          style: AppTextStyles.textoGrande.copyWith(color: AppColors.branco),
+          style: AppTextStyles.textoGrande.copyWith(
+            color: AppColors.branco),
         ),
       ),
     );
