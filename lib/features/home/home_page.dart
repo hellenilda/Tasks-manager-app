@@ -71,7 +71,7 @@ class HomePage extends StatelessWidget {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.lilas, 
-                    foregroundColor: AppColors.branco, 
+                    foregroundColor: AppColors.branco,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(9.0)
                     )
@@ -82,7 +82,7 @@ class HomePage extends StatelessWidget {
                       'Adicionar', 
                       style: AppTextStyles.p,
                     ),
-                  )
+                  ),
                 ),
               ],
             ),
@@ -90,9 +90,11 @@ class HomePage extends StatelessWidget {
         ),
       ),
       appBar: AppBar(
-        title: Text(
-          'BEM VINDO, USER', 
-          style: AppTextStyles.h1,
+        title: Align(
+          child: Text(
+            'BEM VINDO, USER', 
+            style: AppTextStyles.h1,
+          ),
         ),
         backgroundColor: AppColors.branco,
         bottom: PreferredSize(
@@ -102,6 +104,7 @@ class HomePage extends StatelessWidget {
             height: 1.0, // Espessura da borda
           ),
         ),
+        leading: Icon(Icons.person_outline_sharp),
       ),
     );
   }
