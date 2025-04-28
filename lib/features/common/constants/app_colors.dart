@@ -8,5 +8,7 @@ class AppColors {
 
   static const Color lilas = Color(0xFFB08EFF);
   static const Color branco = Color(0xFFFFFFFF);
+  static const Color cinza = Color(0xFFB5B5B5);
+  static const Color cinzaBg = Color(0xFFF6F9FF);
   static List<Color> gradienteLilas = [Color(0xFFB08EFF), Color.fromARGB(255, 117, 64, 243)];
 }

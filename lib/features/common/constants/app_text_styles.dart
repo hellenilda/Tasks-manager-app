@@ -12,12 +12,12 @@ class AppTextStyles {
 
   static const TextStyle h1 = TextStyle(
     fontFamily: 'Montserrat',
-    fontSize: 32.0,
+    fontSize: 28.0,
     fontWeight: FontWeight.bold
   );
 
   static const TextStyle p = TextStyle(
     fontFamily: 'Montserrat',
-    fontSize: 20.0,
+    fontSize: 16.0,
   );
 }
