@@ -10,65 +10,97 @@ class LoginPage extends StatelessWidget{
     return Scaffold(
       backgroundColor: AppColors.azulBg,
       body: Center(
-        child: Column(
-          children: [
-            Text(
-              'LOGIN',
-              style: AppTextStyles.h1,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 40,
-                vertical: 20
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // IconButton(
+              //   onPressed: (){},
+              //   icon: Icon(Icons.help)
+              // ),
+              Text(
+                'LOGIN',
+                style: AppTextStyles.h1,
               ),
-              child: TextField(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Digite seu e-mail'
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 20
+                ),
+                child: TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Digite seu e-mail'
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 40,
-                vertical: 20
-              ),
-              child: TextField(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Digite sua senha'
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 20
+                ),
+                child: TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Digite sua senha'
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: 34,
-                bottom: 15
+              Padding(
+                padding: EdgeInsets.only(
+                  top: 34,
+                  bottom: 15
+                ),
+                child: Container(
+                  width: MediaQuery.of(context).size.width - 30,
+                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.lilas,
+                      foregroundColor: AppColors.branco,
+                      minimumSize: Size(0, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(9.0)
+                      )
+                    ),
+                    onPressed: (){}, 
+                    child: Text(
+                      'Entrar',
+                      style: AppTextStyles.p,
+                    )
+                  ),
+                ),
               ),
-              child: ElevatedButton(
-                onPressed: (){}, 
-                child: Text(
-                  'Entrar'
-                )
+              Container(
+                width: MediaQuery.of(context).size.width - 30,
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.lilas,
+                    minimumSize: Size(0, 50),
+                    side: BorderSide(color: AppColors.lilas),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(9.0)
+                    )
+                  ),
+                  onPressed: (){}, 
+                  child: Text(
+                    'Esqueci a senha',
+                    style: AppTextStyles.p,
+                  )
+                ),
               ),
-            ),
-            OutlinedButton(
-              onPressed: (){}, 
-              child: Text(
-                'Esqueci a senha'
+              Padding(
+                padding: EdgeInsets.only(top: 34),
+                child: TextButton(
+                  onPressed: (){},
+                  child: Text(
+                    'Não possui Login? Cadastre-se',
+                    style: AppTextStyles.textButtonUnderlined.copyWith(color: AppColors.cinza)
+                  )
+                ),
               )
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 34),
-              child: TextButton(
-                onPressed: (){},
-                child: Text(
-                  'Não possui Login? Cadastre-se',
-                  style: AppTextStyles.textButtonUnderlined.copyWith(color: AppColors.cinza)
-                )
-              ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
