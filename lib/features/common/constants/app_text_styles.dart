@@ -20,4 +20,10 @@ class AppTextStyles {
     fontFamily: 'Montserrat',
     fontSize: 16.0,
   );
+
+  static const TextStyle textButtonUnderlined = TextStyle(
+    fontFamily: 'Montserrat',
+    fontSize: 14.0,
+    decoration: TextDecoration.underline
+  );
 }
