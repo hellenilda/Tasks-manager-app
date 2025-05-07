@@ -2,10 +2,15 @@ import 'package:first_app/features/common/constants/app_colors.dart';
 import 'package:first_app/features/common/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   String? user;
-  HomePage({super.key, user});
+  HomePage(this.user);
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,7 +18,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Align(
           child: Text(
-            'BEM VINDO, ${user?.toUpperCase()}', 
+            'BEM VINDO, ${(widget.user)?.toUpperCase()}', 
             style: AppTextStyles.h1,
           ),
         ),
@@ -87,6 +92,9 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
+            Checkbox(
+              value: true,
+              onChanged: (bool? val){}),
             Padding(
               padding: EdgeInsets.all(20),
               child: Container(

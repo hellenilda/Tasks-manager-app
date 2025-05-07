@@ -4,8 +4,15 @@ import 'package:first_app/features/common/constants/app_text_styles.dart';
 import 'package:first_app/features/home/home_page.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget{
+class LoginPage extends StatefulWidget{
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController _emailUser = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +36,7 @@ class LoginPage extends StatelessWidget{
                   vertical: 20
                 ),
                 child: TextField(
+                  controller: _emailUser,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Digite seu e-mail'
@@ -69,8 +77,8 @@ class LoginPage extends StatelessWidget{
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HomePage()
-                        ) // Redirecionamento para o Home
+                          builder: (context) => HomePage(_emailUser.text) // Redirecionamento para o Home
+                        )
                       );
                     },
                     child: Text(
