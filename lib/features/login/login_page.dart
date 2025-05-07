@@ -1,4 +1,4 @@
-import 'package:first_app/features/cadastro/signin_page.dart';
+import 'package:first_app/features/sign_in/signin_page.dart';
 import 'package:first_app/features/common/constants/app_colors.dart';
 import 'package:first_app/features/common/constants/app_text_styles.dart';
 import 'package:first_app/features/home/home_page.dart';
