@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   String? user;
+
   HomePage(this.user);
 
   @override
@@ -11,6 +12,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool? _concluida = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,9 +95,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            Checkbox(
-              value: true,
-              onChanged: (bool? val){}),
             Padding(
               padding: EdgeInsets.all(20),
               child: Container(
@@ -104,9 +104,20 @@ class _HomePageState extends State<HomePage> {
                 ),
                 height: 60,
                 child: Center(
-                  child: Text(
-                    'Tarefa', 
-                    style: AppTextStyles.p,),
+                  child: Row(
+                    children: [
+                        Checkbox(
+                          value: _concluida,
+                          onChanged: (bool? val){
+                            setState(() {
+                              _concluida = val;
+                          });
+                        }),
+                        Text(
+                        'Tarefa', 
+                        style: AppTextStyles.p,),
+                      ],
+                  ),
                 ),
               ),
             ),
