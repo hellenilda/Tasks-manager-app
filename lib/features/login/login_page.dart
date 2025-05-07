@@ -1,5 +1,6 @@
 import 'package:first_app/features/common/constants/app_colors.dart';
 import 'package:first_app/features/common/constants/app_text_styles.dart';
+import 'package:first_app/features/home/home_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget{
@@ -39,6 +40,7 @@ class LoginPage extends StatelessWidget{
                   vertical: 20
                 ),
                 child: TextField(
+                  obscureText: true,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Digite sua senha'
@@ -62,7 +64,12 @@ class LoginPage extends StatelessWidget{
                         borderRadius: BorderRadius.circular(9.0)
                       )
                     ),
-                    onPressed: (){}, 
+                    onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()) // Redirecionamento para o Home
+                      );
+                    },
                     child: Text(
                       'Entrar',
                       style: AppTextStyles.p,
