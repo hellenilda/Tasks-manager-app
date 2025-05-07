@@ -3,7 +3,8 @@ import 'package:first_app/features/common/constants/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  String? user;
+  HomePage({super.key, user});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Align(
           child: Text(
-            'BEM VINDO, USER', 
+            'BEM VINDO, ${user?.toUpperCase()}', 
             style: AppTextStyles.h1,
           ),
         ),

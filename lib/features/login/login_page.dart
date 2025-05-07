@@ -1,3 +1,4 @@
+import 'package:first_app/features/cadastro/signin_page.dart';
 import 'package:first_app/features/common/constants/app_colors.dart';
 import 'package:first_app/features/common/constants/app_text_styles.dart';
 import 'package:first_app/features/home/home_page.dart';
@@ -67,7 +68,9 @@ class LoginPage extends StatelessWidget{
                     onPressed: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => HomePage()) // Redirecionamento para o Home
+                        MaterialPageRoute(
+                          builder: (context) => HomePage()
+                        ) // Redirecionamento para o Home
                       );
                     },
                     child: Text(
@@ -99,7 +102,14 @@ class LoginPage extends StatelessWidget{
               Padding(
                 padding: EdgeInsets.only(top: 34),
                 child: TextButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SignInPage()
+                      )
+                    );
+                  },
                   child: Text(
                     'Não possui Login? Cadastre-se',
                     style: AppTextStyles.textButtonUnderlined.copyWith(color: AppColors.cinza)
