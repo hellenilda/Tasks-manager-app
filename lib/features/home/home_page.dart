@@ -121,34 +121,16 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.lilas, 
-                      foregroundColor: AppColors.branco,
-                      minimumSize: Size(0, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(9.0)
-                      )
-                    ),
-                    onPressed: (){},
-                    child: Align(
-                      child: Text(
-                        'Adicionar', 
-                        style: AppTextStyles.p,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){},
+        backgroundColor: AppColors.lilas,
+        foregroundColor: AppColors.branco,
+        child: Icon(Icons.add)
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
