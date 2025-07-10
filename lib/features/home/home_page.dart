@@ -1,11 +1,14 @@
 import 'package:first_app/features/common/constants/app_colors.dart';
 import 'package:first_app/features/common/constants/app_text_styles.dart';
+import 'package:first_app/features/login/login_controller.dart';
+import 'package:first_app/features/login/login_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  String? user;
+  final String? user;
+  final LoginController? controller;
 
-  HomePage(this.user);
+  const HomePage(this.user, {this.controller, super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -21,7 +24,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Align(
           child: Text(
-            'BEM VINDO, ${(widget.user)?.toUpperCase()}', 
+            'BEM VINDO, ${(widget.user?.split('@').first ?? 'Usuário').toUpperCase()}!',
             style: AppTextStyles.h1,
           ),
         ),
@@ -38,7 +41,62 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: AppColors.branco,
         child: Column(
           children: [
-            Icon(Icons.person),
+            // Header do Drawer
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: AppColors.lilas,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.white,
+                    child: Icon(
+                      Icons.person,
+                      size: 40,
+                      color: AppColors.lilas,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Olá, ${widget.user?.split('@').first ?? 'Usuário'}!',
+                    style: AppTextStyles.p.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            
+            // Opções do menu
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Início'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Configurações'),
+              onTap: () {
+                Navigator.pop(context);
+                // Lembrete para implementar uma tela de configurações
+              },
+            ),
+            const Divider(),
+            
+            // Botão de Logout
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: const Text('Sair', style: TextStyle(color: Colors.red)),
+              onTap: () async {
+                Navigator.pop(context); // Fecha o drawer
+                _showLogoutDialog();
+              },
+            ),
           ],
         ),
       ),
@@ -131,6 +189,48 @@ class _HomePageState extends State<HomePage> {
         child: Icon(Icons.add)
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+  }
+
+  void _showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmar Saída'),
+          content: const Text('Tem certeza que deseja sair?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final navigator = Navigator.of(context);
+                navigator.pop();
+                
+                if (widget.controller != null) {
+                  await widget.controller!.logout();
+                }
+                
+                if (mounted) {
+                  navigator.pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    (route) => false,
+                  );
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('Sair'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:first_app/features/sign_in/signin_page.dart';
 import 'package:first_app/features/common/constants/app_colors.dart';
 import 'package:first_app/features/common/constants/app_text_styles.dart';
 import 'package:first_app/features/home/home_page.dart';
+import 'package:first_app/features/login/login_controller.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget{
@@ -12,7 +13,28 @@ class LoginPage extends StatefulWidget{
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _emailUser = TextEditingController();
+  final LoginController _controller = LoginController();
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _resetEmailController = TextEditingController();
+  bool _obscurePassword = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Verifica se o usuário já está logado
+    _controller.checkLoginStatus().then((_) {
+      if (_controller.currentUser != null) {
+        _navigateToHome(_controller.currentUser!);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _resetEmailController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,114 +42,262 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: AppColors.azulBg,
       body: Center(
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // IconButton(
-              //   onPressed: (){},
-              //   icon: Icon(Icons.help)
-              // ),
-              Text(
-                'LOGIN',
-                style: AppTextStyles.h1,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 40,
-                  vertical: 20
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Text(
+                  'LOGIN',
+                  style: AppTextStyles.h1,
                 ),
-                child: TextField(
-                  controller: _emailUser,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Digite seu e-mail'
+                
+                // Campo de Email
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 20
+                  ),
+                  child: TextFormField(
+                    controller: _controller.emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: _controller.validateEmail,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Digite seu e-mail',
+                      prefixIcon: Icon(Icons.email),
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 40,
-                  vertical: 20
-                ),
-                child: TextField(
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Digite sua senha'
+                
+                // Campo de Senha
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 20
+                  ),
+                  child: TextFormField(
+                    controller: _controller.passwordController,
+                    obscureText: _obscurePassword,
+                    validator: _controller.validatePassword,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: 'Digite sua senha',
+                      prefixIcon: const Icon(Icons.lock),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword ? Icons.visibility : Icons.visibility_off
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 34,
-                  bottom: 15
+
+                // Mensagem de erro
+                AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    if (_controller.errorMessage != null) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.red.shade50,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.red.shade300),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.error_outline, color: Colors.red.shade700),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  _controller.errorMessage!,
+                                  style: TextStyle(color: Colors.red.shade700),
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: _controller.clearError,
+                                iconSize: 20,
+                                color: Colors.red.shade700,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
                 ),
-                child: Container(
+                
+                // Botão de Login
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 34,
+                    bottom: 15
+                  ),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 30,
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: AnimatedBuilder(
+                      animation: _controller,
+                      builder: (context, child) {
+                        return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.lilas,
+                            foregroundColor: AppColors.branco,
+                            minimumSize: const Size(0, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(9.0)
+                            )
+                          ),
+                          onPressed: _controller.isLoading ? null : _handleLogin,
+                          child: _controller.isLoading
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  'Entrar',
+                                  style: AppTextStyles.p,
+                                )
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                
+                // Botão Esqueci a Senha
+                Container(
                   width: MediaQuery.of(context).size.width - 30,
-                  padding: EdgeInsets.symmetric(horizontal: 40),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.lilas,
-                      foregroundColor: AppColors.branco,
-                      minimumSize: Size(0, 50),
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.lilas,
+                      minimumSize: const Size(0, 50),
+                      side: BorderSide(color: AppColors.lilas),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(9.0)
                       )
                     ),
-                    onPressed: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(_emailUser.text) // Redirecionamento para o Home
-                        )
-                      );
-                    },
+                    onPressed: _showResetPasswordDialog, 
                     child: Text(
-                      'Entrar',
+                      'Esqueci a senha',
                       style: AppTextStyles.p,
                     )
                   ),
                 ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width - 30,
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.lilas,
-                    minimumSize: Size(0, 50),
-                    side: BorderSide(color: AppColors.lilas),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(9.0)
+                
+                // Link para Cadastro
+                Padding(
+                  padding: const EdgeInsets.only(top: 34),
+                  child: TextButton(
+                    onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignInPage()
+                        )
+                      );
+                    },
+                    child: Text(
+                      'Não possui Login? Cadastre-se',
+                      style: AppTextStyles.textButtonUnderlined.copyWith(color: AppColors.cinza)
                     )
                   ),
-                  onPressed: (){}, 
-                  child: Text(
-                    'Esqueci a senha',
-                    style: AppTextStyles.p,
-                  )
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 34),
-                child: TextButton(
-                  onPressed: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SignInPage()
-                      )
-                    );
-                  },
-                  child: Text(
-                    'Não possui Login? Cadastre-se',
-                    style: AppTextStyles.textButtonUnderlined.copyWith(color: AppColors.cinza)
-                  )
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _handleLogin() async {
+    if (_formKey.currentState!.validate()) {
+      final result = await _controller.login();
+      
+      if (result.success && mounted) {
+        _navigateToHome(result.data);
+      }
+    }
+  }
+
+  void _navigateToHome(dynamic user) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePage(user.email, controller: _controller)
+      )
+    );
+  }
+
+  void _showResetPasswordDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Recuperar Senha'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Digite seu email para receber as instruções de recuperação:'),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _resetEmailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Email',
+                  prefixIcon: Icon(Icons.email),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _resetEmailController.clear();
+              },
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final email = _resetEmailController.text.trim();
+                if (email.isNotEmpty) {
+                  final navigator = Navigator.of(context);
+                  final messenger = ScaffoldMessenger.of(context);
+                  navigator.pop();
+                  final result = await _controller.resetPassword(email);
+                  
+                  if (mounted) {
+                    messenger.showSnackBar(
+                      SnackBar(
+                        content: Text(result.message ?? 'Operação realizada'),
+                        backgroundColor: result.success ? Colors.green : Colors.red,
+                      ),
+                    );
+                  }
+                  _resetEmailController.clear();
+                }
+              },
+              child: const Text('Enviar'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
