@@ -3,6 +3,7 @@ import 'package:first_app/features/common/constants/app_colors.dart';
 import 'package:first_app/features/common/constants/app_text_styles.dart';
 import 'package:first_app/features/home/home_page.dart';
 import 'package:first_app/features/login/login_controller.dart';
+import 'package:first_app/features/login/widgets/forgot_password_dialog.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget{
@@ -15,7 +16,6 @@ class LoginPage extends StatefulWidget{
 class _LoginPageState extends State<LoginPage> {
   final LoginController _controller = LoginController();
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _resetEmailController = TextEditingController();
   bool _obscurePassword = true;
 
   @override
@@ -32,7 +32,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     _controller.dispose();
-    _resetEmailController.dispose();
     super.dispose();
   }
 
@@ -238,7 +237,7 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => HomePage(user.email, controller: _controller)
+        builder: (context) => HomePage(user.email, loginController: _controller)
       )
     );
   }
@@ -247,56 +246,7 @@ class _LoginPageState extends State<LoginPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Recuperar Senha'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text('Digite seu email para receber as instruções de recuperação:'),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _resetEmailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _resetEmailController.clear();
-              },
-              child: const Text('Cancelar'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final email = _resetEmailController.text.trim();
-                if (email.isNotEmpty) {
-                  final navigator = Navigator.of(context);
-                  final messenger = ScaffoldMessenger.of(context);
-                  navigator.pop();
-                  final result = await _controller.resetPassword(email);
-                  
-                  if (mounted) {
-                    messenger.showSnackBar(
-                      SnackBar(
-                        content: Text(result.message ?? 'Operação realizada'),
-                        backgroundColor: result.success ? Colors.green : Colors.red,
-                      ),
-                    );
-                  }
-                  _resetEmailController.clear();
-                }
-              },
-              child: const Text('Enviar'),
-            ),
-          ],
-        );
+        return ForgotPasswordDialog(controller: _controller);
       },
     );
   }

@@ -127,6 +127,19 @@ class AuthService {
         return AuthResult.failure('A senha deve ter pelo menos 6 caracteres');
       }
 
+      if (name.trim().length < 2) {
+        return AuthResult.failure('Nome deve ter pelo menos 2 caracteres');
+      }
+
+      if (name.trim().length > 50) {
+        return AuthResult.failure('Nome deve ter no máximo 50 caracteres');
+      }
+
+      // Verifica se o nome contém apenas letras, espaços e acentos
+      if (!RegExp(r'^[a-zA-ZÀ-ÿ\s]+$').hasMatch(name.trim())) {
+        return AuthResult.failure('Nome deve conter apenas letras');
+      }
+
       // Verifica se o email já existe
       final existingUser = _mockUsers.firstWhere(
         (user) => user['email']?.toLowerCase() == email.toLowerCase(),
@@ -142,7 +155,7 @@ class AuthService {
         'id': DateTime.now().millisecondsSinceEpoch.toString(),
         'email': email.toLowerCase(),
         'password': password,
-        'name': name,
+        'name': name.trim(),
       };
       
       _mockUsers.add(newUser);

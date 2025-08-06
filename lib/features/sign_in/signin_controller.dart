@@ -59,11 +59,18 @@ class SignInController extends ChangeNotifier {
 
   // Validações
   String? validateName(String? value) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.trim().isEmpty) {
       return 'Nome é obrigatório';
     }
-    if (value.length < 2) {
+    if (value.trim().length < 2) {
       return 'Nome deve ter pelo menos 2 caracteres';
+    }
+    if (value.trim().length > 50) {
+      return 'Nome deve ter no máximo 50 caracteres';
+    }
+    // Verifica se contém apenas letras, espaços e acentos
+    if (!RegExp(r'^[a-zA-ZÀ-ÿ\s]+$').hasMatch(value.trim())) {
+      return 'Nome deve conter apenas letras';
     }
     return null;
   }
@@ -84,6 +91,13 @@ class SignInController extends ChangeNotifier {
     }
     if (value.length < 6) {
       return 'A senha deve ter pelo menos 6 caracteres';
+    }
+    if (value.length > 50) {
+      return 'A senha deve ter no máximo 50 caracteres';
+    }
+    // Verifica se contém pelo menos uma letra e um número
+    if (!RegExp(r'^(?=.*[a-zA-Z])(?=.*\d)').hasMatch(value)) {
+      return 'A senha deve conter pelo menos uma letra e um número';
     }
     return null;
   }

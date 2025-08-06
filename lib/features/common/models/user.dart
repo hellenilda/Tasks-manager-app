@@ -33,6 +33,21 @@ class User {
 
   // Método para extrair o primeiro nome do usuário
   String get firstName {
-    return name.split(' ').first;
+    final parts = name.trim().split(' ');
+    return parts.isNotEmpty ? parts.first : name;
+  }
+
+  // Método para extrair o último nome do usuário
+  String get lastName {
+    final parts = name.trim().split(' ');
+    return parts.length > 1 ? parts.last : '';
+  }
+
+  // Método para obter as iniciais do nome
+  String get initials {
+    final parts = name.trim().split(' ');
+    if (parts.isEmpty) return '';
+    if (parts.length == 1) return parts.first.substring(0, 1).toUpperCase();
+    return '${parts.first.substring(0, 1)}${parts.last.substring(0, 1)}'.toUpperCase();
   }
 }
